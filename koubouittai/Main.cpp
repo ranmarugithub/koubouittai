@@ -51,7 +51,8 @@ public:
 	// 更新関数（オプション）
 	void update() override
 	{
-		Circle circle;
+		Circle shot;
+		Circle enemy;
 
 		double directionx = 0.0;
 		double directiony = 0.0;
@@ -66,8 +67,7 @@ public:
 			ClearPrint();
 
 			const double deltaTime = Scene::DeltaTime();
-			circle = Circle{ pos,20 };
-
+			shot = Circle{ pos,20 };
 
 			//弾を発射
 			if (KeySpace.down())
@@ -163,7 +163,7 @@ public:
 			}
 
 			//円を描く
-			circle.draw(Palette::White);
+			shot.draw(Palette::White);
 
 			//デバッグ
 			Print << U"{:.4f}"_fmt(pos);
