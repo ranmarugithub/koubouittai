@@ -79,27 +79,30 @@ public:
 	// 更新関数（オプション）
 	void update() override
 	{
-
+		//画面の大きさ
 		const RectF shape{ 0, 0, 800, 600 };
 
 		Circle shot;
-		Array<Circle> enemies;
 		Circle enemy;
 
 		Vec2 shotpos{ 400, 300 };
+
+		//敵の初期位置ランダム
 		Vec2 enemypos = RandomVec2(shape);
 
+		//配列わからん
+		Array<Circle> enemies;
 		for (int32 i = 0; i < 10; i++)
 		{
 			enemies << Circle(enemypos, 20);
 		}
+		//
 
 		double directionx = 0.0;
 		double directiony = 0.0;
+
 		bool shotenable = false;
 		bool enemyenable = true;
-
-
 
 		const double speed = 200;
 
@@ -108,7 +111,9 @@ public:
 			ClearPrint();
 
 			const double deltaTime = Scene::DeltaTime();
+			//弾の位置
 			shot = Circle{ shotpos,20 };
+			//敵の位置
 			enemy = Circle{ enemypos,20 };
 			//enemies = Circle{ enemypos,20 };
 			//弾を発射
@@ -228,7 +233,7 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Deepskyblue, Arg::bottom = Palette::Midnightblue);
+		
 	}
 };
 
