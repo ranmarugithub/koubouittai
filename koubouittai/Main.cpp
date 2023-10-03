@@ -44,19 +44,25 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		Scene::SetBackground(ColorF{ 0.2, 0.8, 0.4 });
+		Scene::SetBackground(ColorF{ 1.0, 1.0, 1.0 });
 
 		FontAsset(U"TitleFont")(U"攻防一体")
 			.drawAt(TextStyle::OutlineShadow(0.2, ColorF{ 0.2, 0.6, 0.2 }, Vec2{ 3, 3 }, ColorF{ 0.0, 0.5 }), 100, Vec2{ 400, 100 });
 
 		m_startButton.draw(ColorF{ 1.0, m_startTransition.value() }).drawFrame(2);
-		m_rankingButton.draw(ColorF{ 1.0, m_rankingTransition.value() }).drawFrame(2);
-		m_exitButton.draw(ColorF{ 1.0, m_exitTransition.value() }).drawFrame(2);
+		m_exitButton.draw(ColorF{ 1.0, m_exitTransition.value() }).drawFrame(2);	
 
 		FontAsset(U"Menu")(U"PLAY").drawAt(m_startButton.center(), ColorF{ 0.25 });
-		FontAsset(U"Menu")(U"RANKING").drawAt(m_rankingButton.center(), ColorF{ 0.25 });
 		FontAsset(U"Menu")(U"EXIT").drawAt(m_exitButton.center(), ColorF{ 0.25 });
 	}
+
+private:
+
+	Rect m_startButton{ Arg::center = Scene::Center(), 300, 60 };
+	Transition m_startTransition{ 0.4s, 0.2s };
+
+	Rect m_exitButton{ Arg::center = Scene::Center().movedBy(0, 200), 300, 60 };
+	Transition m_exitTransition{ 0.4s, 0.2s };
 };
 
 class Game : public App::Scene
@@ -208,6 +214,8 @@ public:
 void Main()
 {
 	FontAsset::Register(U"TitleFont", 60, Typeface::Heavy);
+	FontAsset(U"TitleFont").setBufferThickness(4);
+	FontAsset::Register(U"Menu", FontMethod::MSDF, 40, Typeface::Medium);
 
 	// シーンマネージャーを作成
 	App manager;
