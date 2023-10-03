@@ -58,7 +58,8 @@ public:
 		double directiony = 0.0;
 		bool shotenable = false;
 
-		Vec2 pos{ 400, 300 };
+		Vec2 shotpos{ 400, 300 };
+		Vec2 enemypos{ 500, 400 };
 
 		const double speed = 200;
 
@@ -67,7 +68,8 @@ public:
 			ClearPrint();
 
 			const double deltaTime = Scene::DeltaTime();
-			shot = Circle{ pos,20 };
+			shot = Circle{ shotpos,20 };
+			enemy = Circle{ enemypos,20 };
 
 			//弾を発射
 			if (KeySpace.down())
@@ -151,22 +153,23 @@ public:
 			if (shotenable == true)
 			{
 				//弾の移動
-				pos.x += (speed * deltaTime * directionx);
-				pos.y += (speed * deltaTime * directiony);
+				shotpos.x += (speed * deltaTime * directionx);
+				shotpos.y += (speed * deltaTime * directiony);
 
 				//弾を無効にする
-				if (pos.x < 0 || pos.x > 800 || pos.y < 0 || pos.y > 600)
+				if (shotpos.x < 0 || shotpos.x > 800 || shotpos.y < 0 || shotpos.y > 600)
 				{
 					shotenable = false;
-					pos = { 400, 300 };
+					shotpos = { 400, 300 };
 				}
 			}
 
 			//円を描く
 			shot.draw(Palette::White);
+			enemy.draw(Palette::Red);
 
 			//デバッグ
-			Print << U"{:.4f}"_fmt(pos);
+			Print << U"{:.4f}"_fmt(shotpos);
 			Print << U"{:.4f}"_fmt(directionx);
 			Print << U"{:.4f}"_fmt(directiony);
 			Print << shotenable;
