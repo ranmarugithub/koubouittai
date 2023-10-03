@@ -7,7 +7,7 @@ enum class State
 	Game,
 };
 
-using App = SceneManager<String>;
+using App = SceneManager<State>;
 
 // タイトルシーン
 
@@ -221,8 +221,8 @@ void Main()
 	App manager;
 
 	// タイトルシーン（名前は "Title"）を登録
-	manager.add<Title>(U"Title");
-	manager.add<Game>(U"Game");
+	manager.add<Title>(State::Title);
+	manager.add<Game>(State::Game);
 
 	while (System::Update())
 	{
