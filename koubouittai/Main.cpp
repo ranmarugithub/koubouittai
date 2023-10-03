@@ -80,7 +80,7 @@ public:
 	void update() override
 	{
 		Circle shot;
-		//Array<Circle> enemies = 
+		Array<Circle> enemies;
 		Circle enemy;
 
 		double directionx = 0.0;
@@ -90,6 +90,8 @@ public:
 
 		Vec2 shotpos{ 400, 300 };
 		Vec2 enemypos{ 500, 400 };
+
+		enemies << Circle{};
 
 		const double speed = 200;
 
@@ -205,7 +207,7 @@ public:
 			}
 
 			//円を描く
-			shot.draw(Palette::White);
+			shot.draw(Palette::Blue);
 			enemy.draw(Palette::Red);
 
 			//デバッグ
