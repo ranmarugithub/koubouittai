@@ -32,7 +32,7 @@ public:
 		if (m_startButton.leftClicked())
 		{
 			// ゲームシーンへ
-			changeScene(State::Game);
+			changeScene(State::Game, 0.5s);
 		}
 		else if (m_exitButton.leftClicked())
 		{
@@ -206,7 +206,7 @@ public:
 					enemypos = RandomVec2(shape);
 				}
 			}
-
+			//円の描画
 			shot.draw(Palette::White);
 			enemy.draw(Palette::Red);
 
@@ -221,7 +221,7 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Deepskyblue, Arg::bottom = Palette::Midnightblue);
+		Scene::SetBackground(Palette::Midnightblue);
 	}
 };
 
