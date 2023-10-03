@@ -7,7 +7,7 @@ enum class State
 	Game,
 };
 
-using App = SceneManager<String>;
+using App = SceneManager<State>;
 
 // タイトルシーン
 
@@ -25,21 +25,44 @@ public:
 	// 更新関数（オプション）
 	void update() override
 	{
-		if (MouseL.down())
+		m_startTransition.update(m_startButton.mouseOver());
+
+		m_exitTransition.update(m_exitButton.mouseOver());
+
+		if (m_startButton.leftClicked())
 		{
-			changeScene(U"Game");
+			// ゲームシーンへ
+			changeScene(State::Game);
+		}
+		else if (m_exitButton.leftClicked())
+		{
+			// 終了
+			System::Exit();
 		}
 	}
 
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		Scene::SetBackground(ColorF{ 0.3, 0.4, 0.5 });
+		Scene::SetBackground(ColorF{ 1.0, 1.0, 1.0 });
 
-		FontAsset(U"TitleFont")(U"My Game").drawAt(400, 100);
+		FontAsset(U"TitleFont")(U"攻防一体")
+			.drawAt(TextStyle::OutlineShadow(0.2, ColorF{ 0.2, 0.6, 0.2 }, Vec2{ 3, 3 }, ColorF{ 0.0, 0.5 }), 100, Vec2{ 400, 100 });
 
-		Circle{ Cursor::Pos(), 50 }.draw(Palette::Orange);
+		m_startButton.draw(ColorF{ 1.0, m_startTransition.value() }).drawFrame(2);
+		m_exitButton.draw(ColorF{ 1.0, m_exitTransition.value() }).drawFrame(2);	
+
+		FontAsset(U"Menu")(U"PLAY").drawAt(m_startButton.center(), ColorF{ 0.25 });
+		FontAsset(U"Menu")(U"EXIT").drawAt(m_exitButton.center(), ColorF{ 0.25 });
 	}
+
+private:
+
+	Rect m_startButton{ Arg::center = Scene::Center(), 300, 60 };
+	Transition m_startTransition{ 0.4s, 0.2s };
+
+	Rect m_exitButton{ Arg::center = Scene::Center().movedBy(0, 200), 300, 60 };
+	Transition m_exitTransition{ 0.4s, 0.2s };
 };
 
 class Game : public App::Scene
@@ -203,13 +226,15 @@ public:
 void Main()
 {
 	FontAsset::Register(U"TitleFont", 60, Typeface::Heavy);
+	FontAsset(U"TitleFont").setBufferThickness(4);
+	FontAsset::Register(U"Menu", FontMethod::MSDF, 40, Typeface::Medium);
 
 	// シーンマネージャーを作成
 	App manager;
 
 	// タイトルシーン（名前は "Title"）を登録
-	manager.add<Title>(U"Title");
-	manager.add<Game>(U"Game");
+	manager.add<Title>(State::Title);
+	manager.add<Game>(State::Game);
 
 	while (System::Update())
 	{
