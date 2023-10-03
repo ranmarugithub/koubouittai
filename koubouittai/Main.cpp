@@ -57,6 +57,7 @@ public:
 	void update() override
 	{
 		Circle shot;
+		//Array<Circle> enemies = 
 		Circle enemy;
 
 		double directionx = 0.0;
