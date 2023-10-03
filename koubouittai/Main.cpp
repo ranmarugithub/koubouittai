@@ -25,20 +25,37 @@ public:
 	// 更新関数（オプション）
 	void update() override
 	{
-		if (MouseL.down())
+		m_startTransition.update(m_startButton.mouseOver());
+
+		m_exitTransition.update(m_exitButton.mouseOver());
+
+		if (m_startButton.leftClicked())
 		{
-			changeScene(U"Game");
+			// ゲームシーンへ
+			changeScene(State::Game);
+		}
+		else if (m_exitButton.leftClicked())
+		{
+			// 終了
+			System::Exit();
 		}
 	}
 
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		Scene::SetBackground(ColorF{ 0.3, 0.4, 0.5 });
+		Scene::SetBackground(ColorF{ 0.2, 0.8, 0.4 });
 
-		FontAsset(U"TitleFont")(U"My Game").drawAt(400, 100);
+		FontAsset(U"TitleFont")(U"攻防一体")
+			.drawAt(TextStyle::OutlineShadow(0.2, ColorF{ 0.2, 0.6, 0.2 }, Vec2{ 3, 3 }, ColorF{ 0.0, 0.5 }), 100, Vec2{ 400, 100 });
 
-		Circle{ Cursor::Pos(), 50 }.draw(Palette::Orange);
+		m_startButton.draw(ColorF{ 1.0, m_startTransition.value() }).drawFrame(2);
+		m_rankingButton.draw(ColorF{ 1.0, m_rankingTransition.value() }).drawFrame(2);
+		m_exitButton.draw(ColorF{ 1.0, m_exitTransition.value() }).drawFrame(2);
+
+		FontAsset(U"Menu")(U"PLAY").drawAt(m_startButton.center(), ColorF{ 0.25 });
+		FontAsset(U"Menu")(U"RANKING").drawAt(m_rankingButton.center(), ColorF{ 0.25 });
+		FontAsset(U"Menu")(U"EXIT").drawAt(m_exitButton.center(), ColorF{ 0.25 });
 	}
 };
 
