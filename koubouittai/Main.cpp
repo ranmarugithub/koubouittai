@@ -219,7 +219,7 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		//test
+		Scene::SetBackground(ColorF{ 0.3, 0.6, 1.0 });
 	}
 };
 
