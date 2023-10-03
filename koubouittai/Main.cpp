@@ -1,6 +1,11 @@
 ﻿# include <Siv3D.hpp>
 
-# include <Siv3D.hpp>
+//シーンの名前
+enum class State
+{
+	Title,
+	Game,
+};
 
 using App = SceneManager<String>;
 
