@@ -50,7 +50,7 @@ public:
 			.drawAt(TextStyle::OutlineShadow(0.2, ColorF{ 0.2, 0.6, 0.2 }, Vec2{ 3, 3 }, ColorF{ 0.0, 0.5 }), 100, Vec2{ 400, 100 });
 
 		m_startButton.draw(ColorF{ 1.0, m_startTransition.value() }).drawFrame(2);
-		m_exitButton.draw(ColorF{ 1.0, m_exitTransition.value() }).drawFrame(2);	
+		m_exitButton.draw(ColorF{ 1.0, m_exitTransition.value() }).drawFrame(2);
 
 		FontAsset(U"Menu")(U"START GAME").drawAt(m_startButton.center(), ColorF{ 0.25 });
 		FontAsset(U"Menu")(U"EXIT").drawAt(m_exitButton.center(), ColorF{ 0.25 });
@@ -86,13 +86,20 @@ public:
 		Array<Circle> enemies;
 		Circle enemy;
 
+		Vec2 shotpos{ 400, 300 };
+		Vec2 enemypos = RandomVec2(shape);
+
+		for (int32 i = 0; i < 10; i++)
+		{
+			enemies << Circle(enemypos, 20);
+		}
+
 		double directionx = 0.0;
 		double directiony = 0.0;
 		bool shotenable = false;
 		bool enemyenable = true;
 
-		Vec2 shotpos{ 400, 300 };
-		Vec2 enemypos = RandomVec2(shape);
+
 
 		const double speed = 200;
 
@@ -103,7 +110,7 @@ public:
 			const double deltaTime = Scene::DeltaTime();
 			shot = Circle{ shotpos,20 };
 			enemy = Circle{ enemypos,20 };
-
+			//enemies = Circle{ enemypos,20 };
 			//弾を発射
 			if (KeySpace.down())
 			{
