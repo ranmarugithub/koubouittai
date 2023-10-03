@@ -207,8 +207,7 @@ public:
 				}
 			}
 
-			//円を描く
-			shot.draw(Palette::Blue);
+			shot.draw(Palette::White);
 			enemy.draw(Palette::Red);
 
 			//デバッグ
