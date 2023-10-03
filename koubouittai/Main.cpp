@@ -62,6 +62,7 @@ public:
 		double directionx = 0.0;
 		double directiony = 0.0;
 		bool shotenable = false;
+		bool enemyenable = true;
 
 		Vec2 shotpos{ 400, 300 };
 		Vec2 enemypos{ 500, 400 };
@@ -168,7 +169,17 @@ public:
 					shotpos = { 400, 300 };
 				}
 			}
-
+			//当たり判定
+			if (enemyenable == true)
+			{
+				if (shot.intersects(enemy))
+				{
+					shotenable = false;
+					shotpos = { 400, 300 };
+					enemypos = { 300,200 };
+				}
+			}
+			
 			//円を描く
 			shot.draw(Palette::White);
 			enemy.draw(Palette::Red);
