@@ -69,6 +69,8 @@ class Game : public App::Scene
 {
 public:
 
+	Timer timer{ 2min };
+
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
 		: IScene{ init }
@@ -96,7 +98,7 @@ public:
 		{
 			enemies << Circle(enemypos, 20);
 		}
-		//
+		
 
 		double directionx = 0.0;
 		double directiony = 0.0;
@@ -227,6 +229,18 @@ public:
 			//Print << U"{:.4f}"_fmt(directionx);
 			//Print << U"{:.4f}"_fmt(directiony);
 			//Print << shotenable;
+
+			ClearPrint();
+			Print << timer;
+
+			if (SimpleGUI::Button(U"START", Vec2{ 200,20 }))
+			{
+				timer.start();
+			}
+			if (SimpleGUI::Button(U"RESET", Vec2{ 400, 20 }))
+			{
+				timer.reset();
+			}
 		}
 	}
 
@@ -234,6 +248,16 @@ public:
 	void draw() const override
 	{
 		Scene::SetBackground(Palette::Midnightblue);
+
+		Timer timer{ 2min };
+
+		ClearPrint();
+		Print << timer;
+
+		if (SimpleGUI::Button(U"START", Vec2{ 200,20 }))
+		{
+			timer.pause();
+		}
 	}
 };
 
@@ -260,5 +284,3 @@ void Main()
 		}
 	}
 }
-
-
