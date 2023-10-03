@@ -79,8 +79,11 @@ public:
 	// 更新関数（オプション）
 	void update() override
 	{
+
+		const RectF shape{ 0, 0, 800, 600 };
+
 		Circle shot;
-		//Array<Circle> enemies = 
+		Array<Circle> enemies;
 		Circle enemy;
 
 		double directionx = 0.0;
@@ -89,7 +92,7 @@ public:
 		bool enemyenable = true;
 
 		Vec2 shotpos{ 400, 300 };
-		Vec2 enemypos{ 500, 400 };
+		Vec2 enemypos = RandomVec2(shape);
 
 		const double speed = 200;
 
@@ -200,12 +203,12 @@ public:
 				{
 					shotenable = false;
 					shotpos = { 400, 300 };
-					enemypos = { 300,200 };
+					enemypos = RandomVec2(shape);
 				}
 			}
 
 			//円を描く
-			shot.draw(Palette::White);
+			shot.draw(Palette::Blue);
 			enemy.draw(Palette::Red);
 
 			//デバッグ
