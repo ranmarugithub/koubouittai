@@ -209,10 +209,10 @@ public:
 			enemy.draw(Palette::Red);
 
 			//デバッグ
-			Print << U"{:.4f}"_fmt(shotpos);
-			Print << U"{:.4f}"_fmt(directionx);
-			Print << U"{:.4f}"_fmt(directiony);
-			Print << shotenable;
+			//Print << U"{:.4f}"_fmt(shotpos);
+			//Print << U"{:.4f}"_fmt(directionx);
+			//Print << U"{:.4f}"_fmt(directiony);
+			//Print << shotenable;
 		}
 	}
 
@@ -225,7 +225,7 @@ public:
 
 void Main()
 {
-	FontAsset::Register(U"TitleFont", 60, Typeface::Regular);
+	FontAsset::Register(U"TitleFont", 75, Typeface::Regular);
 	FontAsset(U"TitleFont").setBufferThickness(4);
 	FontAsset::Register(U"Menu", FontMethod::MSDF, 40, Typeface::Medium);
 
