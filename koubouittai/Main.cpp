@@ -69,7 +69,7 @@ class Game : public App::Scene
 {
 public:
 
-	Timer timer{ 2min };
+	double timeLeft = 5.0;
 
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
@@ -107,6 +107,10 @@ public:
 		bool enemyenable = true;
 
 		const double speed = 200;
+
+		const Font font{ FontMethod::MSDF,48 };
+
+		double timeLeft = 5.0;
 
 		while (System::Update())
 		{
@@ -224,23 +228,24 @@ public:
 			shot.draw(Palette::White);
 			enemy.draw(Palette::Red);
 
+
+			timeLeft -= Scene::DeltaTime();
+
+			if (0.0 < timeLeft)
+			{
+				font(U"残り時間:{:.2f}"_fmt(timeLeft)).draw(40, 20, 20, Palette::White);
+			}
+			else
+			{
+				font(U"GAME CLEAR").draw(40, 20, 20, Palette::Gold);
+			}
 			//デバッグ
 			//Print << U"{:.4f}"_fmt(shotpos);
 			//Print << U"{:.4f}"_fmt(directionx);
 			//Print << U"{:.4f}"_fmt(directiony);
 			//Print << shotenable;
 
-			ClearPrint();
-			Print << timer;
-
-			if (SimpleGUI::Button(U"START", Vec2{ 200,20 }))
-			{
-				timer.start();
-			}
-			if (SimpleGUI::Button(U"RESET", Vec2{ 400, 20 }))
-			{
-				timer.reset();
-			}
+			
 		}
 	}
 
@@ -248,16 +253,6 @@ public:
 	void draw() const override
 	{
 		Scene::SetBackground(Palette::Midnightblue);
-
-		Timer timer{ 2min };
-
-		ClearPrint();
-		Print << timer;
-
-		if (SimpleGUI::Button(U"START", Vec2{ 200,20 }))
-		{
-			timer.pause();
-		}
 	}
 };
 
