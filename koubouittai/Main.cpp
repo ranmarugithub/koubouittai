@@ -70,6 +70,31 @@ class Game : public App::Scene
 {
 public:
 
+	//画面の大きさ
+	const RectF shape{ 0, 0, 800, 600 };
+
+	Circle shot;
+	Circle enemy;
+
+	Vec2 shotpos{ 400, 300 };
+
+	//敵の初期位置ランダム
+	Vec2 enemypos = RandomVec2(shape);
+
+	//配列わからん
+	Circle enemies{ enemypos,20 };
+
+	double directionx = 0.0;
+	double directiony = 0.0;
+
+	bool shotenable = false;
+	bool enemyenable = true;
+
+	const double speed = 200;
+
+	const Font font{ FontMethod::MSDF,48 };
+
+	double timeLeft = 120.0;
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
 		: IScene{ init }
@@ -80,174 +105,139 @@ public:
 	// 更新関数（オプション）
 	void update() override
 	{
-		//画面の大きさ
-		const RectF shape{ 0, 0, 800, 600 };
+		ClearPrint();
 
-		Circle shot;
-		Circle enemy;
-
-		Vec2 shotpos{ 400, 300 };
-
-		//敵の初期位置ランダム
-		Vec2 enemypos = RandomVec2(shape);
-
-		//配列わからん
-		Array<Circle> enemies;
-		for (int32 i = 0; i < 10; i++)
+		const double deltaTime = Scene::DeltaTime();
+		//弾の位置
+		shot = Circle{ shotpos,20 };
+		//敵の位置
+		enemy = Circle{ enemypos,20 };
+		//enemies = Circle{ enemypos,20 };
+		//弾を発射
+		if (KeySpace.down())
 		{
-			enemies << Circle(enemypos, 20);
+			shotenable = true;
 		}
-		
 
-		double directionx = 0.0;
-		double directiony = 0.0;
-
-		bool shotenable = false;
-		bool enemyenable = true;
-
-		const double speed = 200;
-
-		const Font font{ FontMethod::MSDF,48 };
-
-		double timeLeft = 120.0;
-
-		while (System::Update())
+		//弾の移動入力
+		// ←
+		if (KeyA.pressed())
 		{
-			ClearPrint();
-
-			const double deltaTime = Scene::DeltaTime();
-			//弾の位置
-			shot = Circle{ shotpos,20 };
-			//敵の位置
-			enemy = Circle{ enemypos,20 };
-			//enemies = Circle{ enemypos,20 };
-			//弾を発射
-			if (KeySpace.down())
+			if (directionx > -1.0)
 			{
-				shotenable = true;
+				directionx -= 0.01;
 			}
 
-			//弾の移動入力
-			// ←
-			if (KeyA.pressed())
+			if (directiony > 0)
 			{
-				if (directionx > -1.0)
-				{
-					directionx -= 0.01;
-				}
-
-				if (directiony > 0)
-				{
-					directiony -= 0.005;
-				}
-				if (directiony < 0)
-				{
-					directiony += 0.005;
-				}
+				directiony -= 0.005;
 			}
-
-			// → 
-			if (KeyD.pressed())
+			if (directiony < 0)
 			{
-				if (directionx < 1.0)
-				{
-					directionx += 0.01;
-				}
-
-				if (directiony > 0)
-				{
-					directiony -= 0.005;
-				}
-				if (directiony < 0)
-				{
-					directiony += 0.005;
-				}
+				directiony += 0.005;
 			}
-
-			// ↑ 
-			if (KeyW.pressed())
-			{
-				if (directiony > -1.0)
-				{
-					directiony -= 0.01;
-				}
-
-				if (directionx > 0)
-				{
-					directionx -= 0.005;
-				}
-				if (directionx < 0)
-				{
-					directionx += 0.005;
-				}
-			}
-
-			// ↓ 
-			if (KeyS.pressed())
-			{
-				if (directiony < 1.0)
-				{
-					directiony += 0.01;
-				}
-
-				if (directionx > 0)
-				{
-					directionx -= 0.005;
-				}
-				if (directionx < 0)
-				{
-					directionx += 0.005;
-				}
-			}
-
-			if (shotenable == true)
-			{
-				//弾の移動
-				shotpos.x += (speed * deltaTime * directionx);
-				shotpos.y += (speed * deltaTime * directiony);
-
-				//弾を無効にする
-				if (shotpos.x < 0 || shotpos.x > 800 || shotpos.y < 0 || shotpos.y > 600)
-				{
-					shotenable = false;
-					shotpos = { 400, 300 };
-				}
-			}
-			//当たり判定
-			if (enemyenable == true)
-			{
-				if (shot.intersects(enemy))
-				{
-					shotenable = false;
-					shotpos = { 400, 300 };
-					enemypos = RandomVec2(shape);
-					directionx = 0;
-					directiony = 0;
-				}
-			}
-			//円の描画
-			shot.draw(Palette::White);
-			enemy.draw(Palette::Red);
-
-
-			timeLeft -= Scene::DeltaTime();
-
-			if (0.0 < timeLeft)
-			{
-				font(U"残り時間 {:.2f}"_fmt(timeLeft)).draw(30, 10, 10, Palette::White);
-			}
-			else
-			{
-				font(U"GAME CLEAR").draw(100, 85, 200, Palette::Gold);
-			}
-			//デバッグ
-			//Print << U"{:.4f}"_fmt(shotpos);
-			//Print << U"{:.4f}"_fmt(directionx);
-			//Print << U"{:.4f}"_fmt(directiony);
-			//Print << shotenable;
-
-			
 		}
+
+		// → 
+		if (KeyD.pressed())
+		{
+			if (directionx < 1.0)
+			{
+				directionx += 0.01;
+			}
+
+			if (directiony > 0)
+			{
+				directiony -= 0.005;
+			}
+			if (directiony < 0)
+			{
+				directiony += 0.005;
+			}
+		}
+
+		// ↑ 
+		if (KeyW.pressed())
+		{
+			if (directiony > -1.0)
+			{
+				directiony -= 0.01;
+			}
+
+			if (directionx > 0)
+			{
+				directionx -= 0.005;
+			}
+			if (directionx < 0)
+			{
+				directionx += 0.005;
+			}
+		}
+
+		// ↓ 
+		if (KeyS.pressed())
+		{
+			if (directiony < 1.0)
+			{
+				directiony += 0.01;
+			}
+
+			if (directionx > 0)
+			{
+				directionx -= 0.005;
+			}
+			if (directionx < 0)
+			{
+				directionx += 0.005;
+			}
+		}
+
+		if (shotenable == true)
+		{
+			//弾の移動
+			shotpos.x += (speed * deltaTime * directionx);
+			shotpos.y += (speed * deltaTime * directiony);
+
+			//弾を無効にする
+			if (shotpos.x < 0 || shotpos.x > 800 || shotpos.y < 0 || shotpos.y > 600)
+			{
+				shotenable = false;
+				shotpos = { 400, 300 };
+			}
+		}
+		//当たり判定
+		if (enemyenable == true)
+		{
+			if (shot.intersects(enemy))
+			{
+				shotenable = false;
+				shotpos = { 400, 300 };
+				enemypos = RandomVec2(shape);
+				directionx = 0;
+				directiony = 0;
+			}
+		}
+		//円の描画
+		shot.draw(Palette::White);
+		enemy.draw(Palette::Red);
+
+
+
+		timeLeft -= Scene::DeltaTime();
+
+		if (0.0 < timeLeft)
+		{
+			font(U"残り時間 {:.2f}"_fmt(timeLeft)).draw(30, 10, 10, Palette::White);
+		}
+		else
+		{
+			font(U"GAME CLEAR").draw(100, 85, 200, Palette::Gold);
+		}
+		//デバッグ
+		//Print << U"{:.4f}"_fmt(shotpos);
+		//Print << U"{:.4f}"_fmt(directionx);
+		//Print << U"{:.4f}"_fmt(directiony);
+		//Print << shotenable;
 	}
 
 	// 描画関数（オプション）
