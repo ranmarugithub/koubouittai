@@ -73,9 +73,14 @@ public:
 	//画面の大きさ
 	const RectF shape{ 0, 0, 800, 600 };
 
+	Circle player;
 	Circle shot;
 	Circle enemy;
 
+	//自機の初期位置
+	Vec2 playerpos{ 400,300 };
+
+	//弾の初期位置
 	Vec2 shotpos{ 400, 300 };
 
 	//敵の初期位置ランダム
@@ -109,6 +114,8 @@ public:
 		ClearPrint();
 
 		const double deltaTime = Scene::DeltaTime();
+		//playerの位置
+		player = Circle{ playerpos,20 };
 		//弾の位置
 		shot = Circle{ shotpos,20 };
 		//敵の位置
@@ -221,7 +228,6 @@ public:
 			}
 		}
 		timeLeft -= Scene::DeltaTime();
-
 		if (timeLeft <= 0)
 		{
 			changeScene(State::Clear, 0.5s);
@@ -235,7 +241,8 @@ public:
 		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Midnightblue, Arg::bottom = Palette::Black);
 
 		//円の描画
-		shot.draw(Palette::White);
+		player.draw(Palette::White);
+		shot.draw(Palette::Yellow);
 		enemy.draw(Palette::Red);
 
 		if (0.0 < timeLeft)
