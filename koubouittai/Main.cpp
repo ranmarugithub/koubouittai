@@ -92,6 +92,7 @@ public:
 	double directionx = 0.0;
 	double directiony = 0.0;
 
+	bool playerenable = true;
 	bool shotenable = false;
 	bool enemyenable = true;
 
@@ -216,6 +217,7 @@ public:
 			}
 		}
 		//当たり判定
+		//敵と弾
 		if (enemyenable == true)
 		{
 			if (shot.intersects(enemy))
@@ -227,10 +229,24 @@ public:
 				directiony = 0;
 			}
 		}
+		//敵と自機
+		if (enemyenable == true)
+		{
+			if (player.intersects(enemy))
+			{
+				playerenable = false;
+			}
+		}
+		//クリア判定
 		timeLeft -= Scene::DeltaTime();
 		if (timeLeft <= 0)
 		{
 			changeScene(State::Clear, 0.5s);
+		}
+		//ゲームオーバー判定
+		if (playerenable == false)
+		{
+
 		}
 	}
 
