@@ -94,7 +94,7 @@ public:
 
 	const Font font{ FontMethod::MSDF,48 };
 
-	double timeLeft = 3.0;
+	double timeLeft = 120.0;
 
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
@@ -244,7 +244,7 @@ public:
 		}
 		else
 		{
-			
+
 		}
 	}
 };
@@ -253,6 +253,8 @@ public:
 class Clear : public App::Scene
 {
 public:
+
+	const Font fonta{ FontMethod::MSDF,48 };
 
 	// コンストラクタ（必ず実装）
 	Clear(const InitData& init)
@@ -277,13 +279,15 @@ public:
 	{
 		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Deepskyblue, Arg::bottom = Palette::Midnightblue);
 
+		fonta(U"GAME CLEAR").draw(100, 85, 100, Palette::Gold);
+
 		m_clearButton.draw(ColorF{ 1.0, m_clearTransition.value() }).drawFrame(2);
 
 		FontAsset(U"Menu")(U"BACK TITLE").drawAt(m_clearButton.center(), ColorF{ 0.25 });
 	}
 
 private:
-	Rect m_clearButton{ Arg::center = Scene::Center().movedBy(0, 200), 300, 60 };
+	Rect m_clearButton{ Arg::center = Scene::Center().movedBy(0, 50), 300, 60 };
 	Transition m_clearTransition{ 0.4s, 0.2s };
 };
 
