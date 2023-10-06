@@ -95,6 +95,7 @@ public:
 	const Font font{ FontMethod::MSDF,48 };
 
 	double timeLeft = 120.0;
+
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
 		: IScene{ init }
