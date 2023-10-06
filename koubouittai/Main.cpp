@@ -95,6 +95,7 @@ public:
 	const Font font{ FontMethod::MSDF,48 };
 
 	double timeLeft = 120.0;
+
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
 		: IScene{ init }
@@ -219,8 +220,17 @@ public:
 				directiony = 0;
 			}
 		}
-		
 		timeLeft -= Scene::DeltaTime();
+	}
+
+	// 描画関数（オプション）
+	void draw() const override
+	{
+		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Midnightblue, Arg::bottom = Palette::Black);
+
+		//円の描画
+		shot.draw(Palette::White);
+		enemy.draw(Palette::Red);
 
 		if (0.0 < timeLeft)
 		{
@@ -230,24 +240,16 @@ public:
 		{
 			font(U"GAME CLEAR").draw(100, 85, 200, Palette::Gold);
 		}
-		//デバッグ
-		//Print << U"{:.4f}"_fmt(shotpos);
-		//Print << U"{:.4f}"_fmt(directionx);
-		//Print << U"{:.4f}"_fmt(directiony);
-		//Print << shotenable;
 	}
 
 	// 描画関数（オプション）
 	void draw() const override
 	{
 		Scene::SetBackground(Palette::Midnightblue);
-		//円の描画
-		shot.draw(Palette::White);
-		enemy.draw(Palette::Red);
 	}
 };
 
-// タイトルシーン
+// ゲームクリアシーン
 class Clear : public App::Scene
 {
 public:
@@ -283,7 +285,6 @@ public:
 private:
 	Rect m_clearButton{ Arg::center = Scene::Center().movedBy(0, 200), 300, 60 };
 	Transition m_clearTransition{ 0.4s, 0.2s };
-
 };
 
 void Main()
