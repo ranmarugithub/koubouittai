@@ -218,13 +218,17 @@ public:
 				directiony = 0;
 			}
 		}
+		timeLeft -= Scene::DeltaTime();
+	}
+
+	// 描画関数（オプション）
+	void draw() const override
+	{
+		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Midnightblue, Arg::bottom = Palette::Black);
+
 		//円の描画
 		shot.draw(Palette::White);
 		enemy.draw(Palette::Red);
-
-
-
-		timeLeft -= Scene::DeltaTime();
 
 		if (0.0 < timeLeft)
 		{
@@ -234,17 +238,6 @@ public:
 		{
 			font(U"GAME CLEAR").draw(100, 85, 200, Palette::Gold);
 		}
-		//デバッグ
-		//Print << U"{:.4f}"_fmt(shotpos);
-		//Print << U"{:.4f}"_fmt(directionx);
-		//Print << U"{:.4f}"_fmt(directiony);
-		//Print << shotenable;
-	}
-
-	// 描画関数（オプション）
-	void draw() const override
-	{
-		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Midnightblue, Arg::bottom = Palette::Black);
 	}
 };
 
