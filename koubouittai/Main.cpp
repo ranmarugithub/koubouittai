@@ -5,6 +5,7 @@ enum class State
 {
 	Title,
 	Game,
+	Clear,
 };
 
 using App = SceneManager<State>;
@@ -69,8 +70,6 @@ class Game : public App::Scene
 {
 public:
 
-	double timeLeft = 5.0;
-
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
 		: IScene{ init }
@@ -110,7 +109,7 @@ public:
 
 		const Font font{ FontMethod::MSDF,48 };
 
-		double timeLeft = 5.0;
+		double timeLeft = 120.0;
 
 		while (System::Update())
 		{
@@ -233,11 +232,11 @@ public:
 
 			if (0.0 < timeLeft)
 			{
-				font(U"残り時間:{:.2f}"_fmt(timeLeft)).draw(40, 20, 20, Palette::White);
+				font(U"残り時間 {:.2f}"_fmt(timeLeft)).draw(30, 10, 10, Palette::White);
 			}
 			else
 			{
-				font(U"GAME CLEAR").draw(40, 20, 20, Palette::Gold);
+				font(U"GAME CLEAR").draw(100, 85, 200, Palette::Gold);
 			}
 			//デバッグ
 			//Print << U"{:.4f}"_fmt(shotpos);
@@ -256,6 +255,45 @@ public:
 	}
 };
 
+// タイトルシーン
+class Clear : public App::Scene
+{
+public:
+
+	// コンストラクタ（必ず実装）
+	Clear(const InitData& init)
+		: IScene{ init }
+	{
+
+	}
+
+	// 更新関数（オプション）
+	void update() override
+	{
+		m_clearTransition.update(m_clearButton.mouseOver());
+		if (m_clearButton.leftClicked())
+		{
+			// タイトルシーンへ
+			changeScene(State::Title, 0.5s);
+		}
+	}
+
+	// 描画関数（オプション）
+	void draw() const override
+	{
+		Scene::SetBackground(Palette::Midnightblue);
+
+		m_clearButton.draw(ColorF{ 1.0, m_clearTransition.value() }).drawFrame(2);
+
+		FontAsset(U"Menu")(U"BACK TITLE").drawAt(m_clearButton.center(), ColorF{ 0.25 });
+	}
+
+private:
+	Rect m_clearButton{ Arg::center = Scene::Center().movedBy(0, 200), 300, 60 };
+	Transition m_clearTransition{ 0.4s, 0.2s };
+
+};
+
 void Main()
 {
 	FontAsset::Register(U"TitleFont", 75, Typeface::Regular);
@@ -268,6 +306,7 @@ void Main()
 	// タイトルシーン（名前は "Title"）を登録
 	manager.add<Title>(State::Title);
 	manager.add<Game>(State::Game);
+	manager.add<Clear>(State::Clear);
 
 	while (System::Update())
 	{
