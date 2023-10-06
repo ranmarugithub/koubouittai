@@ -82,8 +82,8 @@ public:
 	Vec2 enemypos = RandomVec2(shape);
 
 	//配列わからん
-	Circle enemies{ enemypos,20 };
-
+	Array <Circle> enemies;
+	
 	double directionx = 0.0;
 	double directiony = 0.0;
 
@@ -94,7 +94,7 @@ public:
 
 	const Font font{ FontMethod::MSDF,48 };
 
-	double timeLeft = 120.0;
+	double timeLeft = 3.0;
 
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
@@ -204,6 +204,8 @@ public:
 			{
 				shotenable = false;
 				shotpos = { 400, 300 };
+				directionx = 0;
+				directiony = 0;
 			}
 		}
 		//当たり判定
@@ -219,11 +221,17 @@ public:
 			}
 		}
 		timeLeft -= Scene::DeltaTime();
+
+		if (timeLeft <= 0)
+		{
+			changeScene(State::Clear, 0.5s);
+		}
 	}
 
 	// 描画関数（オプション）
 	void draw() const override
 	{
+		Scene::SetBackground(Palette::Midnightblue);
 		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Midnightblue, Arg::bottom = Palette::Black);
 
 		//円の描画
@@ -236,7 +244,7 @@ public:
 		}
 		else
 		{
-			font(U"GAME CLEAR").draw(100, 85, 200, Palette::Gold);
+			
 		}
 	}
 };
