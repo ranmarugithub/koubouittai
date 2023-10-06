@@ -93,12 +93,7 @@ public:
 		Vec2 enemypos = RandomVec2(shape);
 
 		//配列わからん
-		Array<Circle> enemies;
-		for (int32 i = 0; i < 10; i++)
-		{
-			enemies << Circle(enemypos, 20);
-		}
-		
+		Circle enemies{ enemypos,20 };
 
 		double directionx = 0.0;
 		double directiony = 0.0;
@@ -112,8 +107,8 @@ public:
 
 		double timeLeft = 5.0;
 
-		while (System::Update())
-		{
+		//while (System::Update())
+		//{
 			ClearPrint();
 
 			const double deltaTime = Scene::DeltaTime();
@@ -229,6 +224,7 @@ public:
 			//円の描画
 			shot.draw(Palette::White);
 			enemy.draw(Palette::Red);
+			
 
 
 			timeLeft -= Scene::DeltaTime();
@@ -248,7 +244,7 @@ public:
 			//Print << shotenable;
 
 			
-		}
+		//}
 	}
 
 	// 描画関数（オプション）
