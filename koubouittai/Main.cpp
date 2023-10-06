@@ -267,7 +267,7 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		Scene::SetBackground(Palette::Midnightblue);
+		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Deepskyblue, Arg::bottom = Palette::Midnightblue);
 
 		m_clearButton.draw(ColorF{ 1.0, m_clearTransition.value() }).drawFrame(2);
 
