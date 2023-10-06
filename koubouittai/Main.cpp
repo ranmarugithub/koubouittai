@@ -94,7 +94,7 @@ public:
 
 	const Font font{ FontMethod::MSDF,48 };
 
-	double timeLeft = 120.0;
+	double timeLeft = 3.0;
 
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
@@ -221,6 +221,11 @@ public:
 			}
 		}
 		timeLeft -= Scene::DeltaTime();
+
+		if (timeLeft <= 0)
+		{
+			changeScene(State::Clear, 0.5s);
+		}
 	}
 
 	// 描画関数（オプション）
@@ -239,7 +244,7 @@ public:
 		}
 		else
 		{
-			font(U"GAME CLEAR").draw(100, 85, 200, Palette::Gold);
+			
 		}
 	}
 };
