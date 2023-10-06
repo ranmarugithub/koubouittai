@@ -82,8 +82,8 @@ public:
 	Vec2 enemypos = RandomVec2(shape);
 
 	//配列わからん
-	Circle enemies{ enemypos,20 };
-
+	Array <Circle> enemies;
+	
 	double directionx = 0.0;
 	double directiony = 0.0;
 
@@ -203,6 +203,8 @@ public:
 			{
 				shotenable = false;
 				shotpos = { 400, 300 };
+				directionx = 0;
+				directiony = 0;
 			}
 		}
 		//当たり判定
@@ -217,12 +219,7 @@ public:
 				directiony = 0;
 			}
 		}
-		//円の描画
-		shot.draw(Palette::White);
-		enemy.draw(Palette::Red);
-
-
-
+		
 		timeLeft -= Scene::DeltaTime();
 
 		if (0.0 < timeLeft)
@@ -244,6 +241,9 @@ public:
 	void draw() const override
 	{
 		Scene::SetBackground(Palette::Midnightblue);
+		//円の描画
+		shot.draw(Palette::White);
+		enemy.draw(Palette::Red);
 	}
 };
 
