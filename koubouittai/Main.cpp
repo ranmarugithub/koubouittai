@@ -253,11 +253,11 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		Scene::SetBackground(Palette::Midnightblue);
+		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Midnightblue, Arg::bottom = Palette::Black);
 	}
 };
 
-// タイトルシーン
+// ゲームクリアシーン
 class Clear : public App::Scene
 {
 public:
@@ -293,7 +293,6 @@ public:
 private:
 	Rect m_clearButton{ Arg::center = Scene::Center().movedBy(0, 200), 300, 60 };
 	Transition m_clearTransition{ 0.4s, 0.2s };
-
 };
 
 void Main()
