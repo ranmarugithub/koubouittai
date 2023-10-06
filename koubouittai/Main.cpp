@@ -226,6 +226,7 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
+		Scene::SetBackground(Palette::Midnightblue);
 		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Midnightblue, Arg::bottom = Palette::Black);
 
 		//円の描画
@@ -240,12 +241,6 @@ public:
 		{
 			font(U"GAME CLEAR").draw(100, 85, 200, Palette::Gold);
 		}
-	}
-
-	// 描画関数（オプション）
-	void draw() const override
-	{
-		Scene::SetBackground(Palette::Midnightblue);
 	}
 };
 
