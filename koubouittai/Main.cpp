@@ -222,7 +222,6 @@ public:
 					shotenable = false;
 					shotpos = { 400, 300 };
 					enemypos = RandomVec2(shape);
-					directionx = 0;
 					directiony = 0;
 				}
 			}
