@@ -85,19 +85,7 @@ public:
 
 	//敵の初期位置ランダム
 	Vec2 enemypos = { RandomVec2(shape) };
-	//Array <Vec2> enemypos = {
-	//	{RandomVec2(shape) },
-	//	{RandomVec2(shape) },
-	//	{RandomVec2(shape) },
-	//};
 
-	//配列わからん
-	Array <Circle> enemies = {
-		{RandomVec2(shape),20},
-		{RandomVec2(shape),20},
-		{RandomVec2(shape),20},
-	};
-	
 	double directionx = 0.0;
 	double directiony = 0.0;
 
@@ -130,11 +118,6 @@ public:
 		shot = Circle{ shotpos,20 };
 		//敵の位置
 		enemy = { enemypos,20 };
-		enemies = {
-			{enemypos,20 },
-			{enemypos,20 },
-			{enemypos,20 },
-		};
 		//弾を発射
 		if (KeySpace.down())
 		{
@@ -273,11 +256,6 @@ public:
 		player.draw(Palette::White);
 		shot.draw(Palette::Yellow);
 		enemy.draw(Palette::Red);
-		for (auto&& i : enemies)
-		{
-			i.draw(Palette::Red);
-		}
-		
 
 		if (0.0 < timeLeft)
 		{
@@ -287,7 +265,7 @@ public:
 		{
 
 		}
-		
+
 	}
 };
 
