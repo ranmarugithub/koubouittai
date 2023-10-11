@@ -78,7 +78,7 @@ public:
 	Circle enemy;
 
 	//自機の初期位置
-	Vec2 playerpos{ 400,300 };
+	Vec2 playerPos{ 400,300 };
 
 	//弾の初期位置
 	Vec2 shotpos{ 400, 300 };
@@ -113,7 +113,7 @@ public:
 
 		const double deltaTime = Scene::DeltaTime();
 		//playerの位置
-		player = Circle{ playerpos,20 };
+		player = Circle{ playerPos,20 };
 		//弾の位置
 		shot = Circle{ shotpos,20 };
 		//敵の位置
@@ -123,6 +123,10 @@ public:
 		{
 			shotenable = true;
 		}
+
+		//敵の移動
+		enemypos.x += (playerPos.x - enemypos.x) * 0.01;
+		enemypos.y += (playerPos.y - enemypos.y) * 0.01;
 
 		//弾の移動入力
 		// ←
