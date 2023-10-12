@@ -69,13 +69,17 @@ private:
 class Game : public App::Scene
 {
 public:
-
+	Vec2 GenerateEnemy()
+	{
+		return RandomVec2({ 50, 750 }, 0);
+	}
 	//画面の大きさ
 	const RectF shape{ 0, 0, 800, 600 };
 
 	Circle player;
 	Circle shot;
-	Circle enemy;
+
+	Array<Vec2> enemies = { GenerateEnemy() };
 
 	//自機の初期位置
 	Vec2 playerPos{ 400,300 };
@@ -85,6 +89,9 @@ public:
 
 	//敵の初期位置ランダム
 	Vec2 enemypos = { RandomVec2(shape) };
+
+	//敵の発生速度
+	int32 cooltime = 200;
 
 	double directionx = 0.0;
 	double directiony = 0.0;
@@ -116,17 +123,29 @@ public:
 		player = Circle{ playerPos,20 };
 		//弾の位置
 		shot = Circle{ shotpos,20 };
-		//敵の位置
-		enemy = { enemypos,20 };
+
+		//敵を発生させる
+		--cooltime;
+		if (cooltime <= 0)
+		{
+			enemies << GenerateEnemy();
+			cooltime = 200;
+		}
+
+		//敵の移動
+
+		for (auto& enemy : enemies)
+		{
+			++enemy.y;
+		}
+
 		//弾を発射
 		if (KeySpace.down())
 		{
 			shotenable = true;
 		}
 
-		//敵の移動
-		enemypos.x += (playerPos.x - enemypos.x) * 0.01;
-		enemypos.y += (playerPos.y - enemypos.y) * 0.01;
+
 
 		//弾の移動入力
 		// ←
@@ -217,26 +236,30 @@ public:
 			}
 		}
 		//当たり判定
-		//敵と弾
-		if (enemyenable == true)
+		for (auto& enemy : enemies)
 		{
-			if (shot.intersects(enemy))
+			//敵と弾
+			if (enemyenable == true)
 			{
-				shotenable = false;
-				shotpos = { 400, 300 };
-				enemypos = RandomVec2(shape);
-				directionx = 0;
-				directiony = 0;
+				if (shot.intersects(enemy))
+				{
+					shotenable = false;
+					shotpos = { 400, 300 };
+					enemypos = RandomVec2(shape);
+					directionx = 0;
+					directiony = 0;
+				}
+			}
+			//敵と自機
+			if (enemyenable == true)
+			{
+				if (player.intersects(enemy))
+				{
+					playerenable = false;
+				}
 			}
 		}
-		//敵と自機
-		if (enemyenable == true)
-		{
-			if (player.intersects(enemy))
-			{
-				playerenable = false;
-			}
-		}
+
 		//クリア判定
 		timeLeft -= Scene::DeltaTime();
 		if (timeLeft <= 0)
@@ -259,7 +282,12 @@ public:
 		//円の描画
 		player.draw(Palette::White);
 		shot.draw(Palette::Yellow);
-		enemy.draw(Palette::Red);
+
+		for (auto& enemy : enemies)
+		{
+			Circle{ enemy,20 }.draw(Palette::Red);
+		}
+
 
 		if (0.0 < timeLeft)
 		{
