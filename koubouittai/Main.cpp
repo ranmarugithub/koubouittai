@@ -78,6 +78,7 @@ public:
 
 	Circle player;
 	Circle shot;
+	Circle enemy;
 
 	Array<Vec2> enemies = { GenerateEnemy() };
 
@@ -88,7 +89,6 @@ public:
 	Vec2 shotpos{ 400, 300 };
 
 	//敵の初期位置ランダム
-	Vec2 enemypos = { RandomVec2(shape) };
 
 	//敵の発生速度
 	int32 cooltime = 200;
@@ -120,9 +120,14 @@ public:
 
 		const double deltaTime = Scene::DeltaTime();
 		//playerの位置
-		player = Circle{ playerPos,20 };
+		player = { playerPos,20 };
 		//弾の位置
-		shot = Circle{ shotpos,20 };
+		shot = { shotpos,20 };
+		//敵の位置
+		for (auto& pos : enemies)
+		{
+			enemy = { pos,20 };
+		}
 
 		//敵を発生させる
 		--cooltime;
@@ -136,7 +141,8 @@ public:
 
 		for (auto& enemy : enemies)
 		{
-			++enemy.y;
+			enemy.x += (playerPos.x - enemy.x) * 0.01;
+			enemy.y += (playerPos.y - enemy.y) * 0.01;
 		}
 
 		//弾を発射
@@ -226,7 +232,7 @@ public:
 			shotpos.x += (speed * deltaTime * directionx);
 			shotpos.y += (speed * deltaTime * directiony);
 
-			//弾を無効にする
+			//画面外に出たら弾を無効にする
 			if (shotpos.x < 0 || shotpos.x > 800 || shotpos.y < 0 || shotpos.y > 600)
 			{
 				shotenable = false;
@@ -245,7 +251,6 @@ public:
 				{
 					shotenable = false;
 					shotpos = { 400, 300 };
-					enemypos = RandomVec2(shape);
 					directionx = 0;
 					directiony = 0;
 				}
@@ -283,9 +288,9 @@ public:
 		player.draw(Palette::White);
 		shot.draw(Palette::Yellow);
 
-		for (auto& enemy : enemies)
+		for (auto& pos : enemies)
 		{
-			Circle{ enemy,20 }.draw(Palette::Red);
+			enemy.draw();
 		}
 
 
