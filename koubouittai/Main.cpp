@@ -78,34 +78,23 @@ public:
 
 	Circle player;
 	Circle shot;
-	Circle enemy;
-
-	//敵の初期位置
-	//Array<Vec2> enemies = { GenerateEnemy() };
 	Array<Circle> enemies;
 
-	//自機の初期位置
+	//自
 	Vec2 playerPos{ 400,300 };
+	bool playerEnable = true;
 
-	//弾の初期位置
+	//弾
 	Vec2 shotpos{ 400, 300 };
-
-	//敵の初期位置ランダム
+	bool shotEnable = false;
+	double directionx = 0.0;
+	double directiony = 0.0;
+	const double speed = 200;
 
 	//敵の発生速度
 	int32 cooltime = 200;
 
-	double directionx = 0.0;
-	double directiony = 0.0;
-
-	bool playerEnable = true;
-	bool shotenable = false;
-	bool enemyenable = true;
-
-	const double speed = 200;
-
 	const Font font{ FontMethod::MSDF,48 };
-
 	double timeLeft = 120.0;
 
 	// コンストラクタ（必ず実装）
@@ -126,7 +115,6 @@ public:
 		//弾の位置
 		shot = { shotpos,20 };
 
-
 		//敵を発生させる
 		--cooltime;
 		if (cooltime <= 0)
@@ -136,7 +124,6 @@ public:
 		}
 
 		//敵の移動
-
 		for (auto& enemy : enemies)
 		{
 			enemy.x += (playerPos.x - enemy.x) * 0.01;
@@ -146,7 +133,7 @@ public:
 		//弾を発射
 		if (KeySpace.down())
 		{
-			shotenable = true;
+			shotEnable = true;
 		}
 
 		//弾の移動入力
@@ -158,7 +145,6 @@ public:
 			{
 				directionx -= 0.01;
 			}
-
 			if (directiony > 0)
 			{
 				directiony -= 0.005;
@@ -176,7 +162,6 @@ public:
 			{
 				directionx += 0.01;
 			}
-
 			if (directiony > 0)
 			{
 				directiony -= 0.005;
@@ -194,7 +179,6 @@ public:
 			{
 				directiony -= 0.01;
 			}
-
 			if (directionx > 0)
 			{
 				directionx -= 0.005;
@@ -212,7 +196,6 @@ public:
 			{
 				directiony += 0.01;
 			}
-
 			if (directionx > 0)
 			{
 				directionx -= 0.005;
@@ -223,7 +206,7 @@ public:
 			}
 		}
 
-		if (shotenable == true)
+		if (shotEnable == true)
 		{
 			//弾の移動
 			shotpos.x += (speed * deltaTime * directionx);
@@ -232,7 +215,7 @@ public:
 			//画面外に出たら弾を無効にする
 			if (shotpos.x < 0 || shotpos.x > 800 || shotpos.y < 0 || shotpos.y > 600)
 			{
-				shotenable = false;
+				shotEnable = false;
 				shotpos = { 400, 300 };
 				directionx = 0;
 				directiony = 0;
@@ -244,18 +227,16 @@ public:
 			//敵と弾
 			if (shot.intersects(enemy))
 			{
-				shotenable = false;
+				shotEnable = false;
 				shotpos = { 400, 300 };
 				directionx = 0;
 				directiony = 0;
 			}
-
 			//敵と自機
 			if (player.intersects(enemy))
 			{
 				playerEnable = false;
 			}
-
 		}
 
 		//クリア判定
@@ -274,18 +255,16 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
+		//背景
 		Scene::SetBackground(Palette::Midnightblue);
 		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Midnightblue, Arg::bottom = Palette::Black);
 
-		//円の描画
 		player.draw(Palette::White);
 		shot.draw(Palette::Yellow);
-
 		for (auto& enemy : enemies)
 		{
 			enemy.draw(Palette::Red);
 		}
-
 
 		if (0.0 < timeLeft)
 		{
@@ -295,7 +274,6 @@ public:
 		{
 
 		}
-
 	}
 };
 
