@@ -80,7 +80,9 @@ public:
 	Circle shot;
 	Circle enemy;
 
-	Array<Vec2> enemies = { GenerateEnemy() };
+	//敵の初期位置
+	//Array<Vec2> enemies = { GenerateEnemy() };
+	Array<Circle> enemies;
 
 	//自機の初期位置
 	Vec2 playerPos{ 400,300 };
@@ -96,7 +98,7 @@ public:
 	double directionx = 0.0;
 	double directiony = 0.0;
 
-	bool playerenable = true;
+	bool playerEnable = true;
 	bool shotenable = false;
 	bool enemyenable = true;
 
@@ -123,17 +125,13 @@ public:
 		player = { playerPos,20 };
 		//弾の位置
 		shot = { shotpos,20 };
-		//敵の位置
-		for (auto& pos : enemies)
-		{
-			enemy = { pos,20 };
-		}
+
 
 		//敵を発生させる
 		--cooltime;
 		if (cooltime <= 0)
 		{
-			enemies << GenerateEnemy();
+			enemies << Circle(GenerateEnemy(), 20);
 			cooltime = 200;
 		}
 
@@ -151,9 +149,8 @@ public:
 			shotenable = true;
 		}
 
-
-
 		//弾の移動入力
+
 		// ←
 		if (KeyA.pressed())
 		{
@@ -245,24 +242,20 @@ public:
 		for (auto& enemy : enemies)
 		{
 			//敵と弾
-			if (enemyenable == true)
+			if (shot.intersects(enemy))
 			{
-				if (shot.intersects(enemy))
-				{
-					shotenable = false;
-					shotpos = { 400, 300 };
-					directionx = 0;
-					directiony = 0;
-				}
+				shotenable = false;
+				shotpos = { 400, 300 };
+				directionx = 0;
+				directiony = 0;
 			}
+
 			//敵と自機
-			if (enemyenable == true)
+			if (player.intersects(enemy))
 			{
-				if (player.intersects(enemy))
-				{
-					playerenable = false;
-				}
+				playerEnable = false;
 			}
+
 		}
 
 		//クリア判定
@@ -272,7 +265,7 @@ public:
 			changeScene(State::Clear, 0.5s);
 		}
 		//ゲームオーバー判定
-		if (playerenable == false)
+		if (playerEnable == false)
 		{
 
 		}
@@ -288,9 +281,9 @@ public:
 		player.draw(Palette::White);
 		shot.draw(Palette::Yellow);
 
-		for (auto& pos : enemies)
+		for (auto& enemy : enemies)
 		{
-			enemy.draw();
+			enemy.draw(Palette::Red);
 		}
 
 
