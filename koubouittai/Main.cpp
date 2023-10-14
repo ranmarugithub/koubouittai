@@ -79,6 +79,7 @@ public:
 	Circle player;
 	Circle shot;
 	Array<Circle> enemies;
+	Array<bool> enemiesEnable;
 
 	//自
 	Vec2 playerPos{ 400,300 };
@@ -120,14 +121,19 @@ public:
 		if (cooltime <= 0)
 		{
 			enemies << Circle(GenerateEnemy(), 20);
+			enemiesEnable << true;
 			cooltime = 200;
 		}
 
 		//敵の移動
-		for (auto& enemy : enemies)
+
+		for (auto i : step(enemies.size()))
 		{
-			enemy.x += (playerPos.x - enemy.x) * 0.01;
-			enemy.y += (playerPos.y - enemy.y) * 0.01;
+			if (enemiesEnable[i] == true)
+			{
+				enemies[i].x += (playerPos.x - enemies[i].x) * 0.01;
+				enemies[i].y += (playerPos.y - enemies[i].y) * 0.01;
+			}
 		}
 
 		//弾を発射
@@ -222,20 +228,31 @@ public:
 			}
 		}
 		//当たり判定
-		for (auto& enemy : enemies)
+
+		for (auto i : step(enemies.size()))
 		{
-			//敵と弾
-			if (shot.intersects(enemy))
+			if (enemiesEnable[i] == true)
 			{
-				shotEnable = false;
-				shotpos = { 400, 300 };
-				directionx = 0;
-				directiony = 0;
-			}
-			//敵と自機
-			if (player.intersects(enemy))
-			{
-				playerEnable = false;
+				//敵vs弾
+				if (shotEnable == true)
+				{
+					if (shot.intersects(enemies[i]))
+					{
+
+						shotEnable = false;
+						shotpos = { 400, 300 };
+						directionx = 0;
+						directiony = 0;
+
+						enemiesEnable[i] = false;
+					}
+				}
+				//敵vs自機
+				if (player.intersects(enemies[i]))
+				{
+					playerEnable = false;
+					enemiesEnable[i] = false;
+				}
 			}
 		}
 
@@ -261,9 +278,12 @@ public:
 
 		player.draw(Palette::White);
 		shot.draw(Palette::Yellow);
-		for (auto& enemy : enemies)
+		for (auto i : step(enemies.size()))
 		{
-			enemy.draw(Palette::Red);
+			if (enemiesEnable[i] == true)
+			{
+				enemies[i].draw(Palette::Red);
+			}
 		}
 
 		if (0.0 < timeLeft)
