@@ -6,6 +6,7 @@ enum class State
 	Title,
 	Game,
 	Clear,
+	GameOver,
 };
 
 using App = SceneManager<State>;
@@ -15,6 +16,8 @@ using App = SceneManager<State>;
 class Title : public App::Scene
 {
 public:
+
+	const Texture shinkai{ U"example/sinkai.jpg" };
 
 	// コンストラクタ（必ず実装）
 	Title(const InitData& init)
@@ -45,7 +48,7 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Deepskyblue, Arg::bottom = Palette::Midnightblue);
+		shinkai.drawAt(400, 300);
 
 		FontAsset(U"TitleFont")(U"攻防一体")
 			.drawAt(TextStyle::OutlineShadow(0.2, ColorF{ 0.2, 0.6, 0.2 }, Vec2{ 3, 3 }, ColorF{ 0.0, 0.5 }), 100, Vec2{ 400, 100 });
@@ -81,7 +84,7 @@ public:
 	Array<Circle> enemies;
 	Array<bool> enemiesEnable;
 
-	//自
+	//自機
 	Vec2 playerPos{ 400,300 };
 	bool playerEnable = true;
 
@@ -96,7 +99,7 @@ public:
 	int32 cooltime = 200;
 
 	const Font font{ FontMethod::MSDF,48 };
-	double timeLeft = 120.0;
+	double timeLeft = 2.0;
 
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
@@ -265,7 +268,7 @@ public:
 		//ゲームオーバー判定
 		if (playerEnable == false)
 		{
-
+			changeScene(State::GameOver, 0.5s);
 		}
 	}
 
@@ -304,6 +307,8 @@ public:
 
 	const Font fonta{ FontMethod::MSDF,48 };
 
+	const Texture yudati{ U"example/taiyo.jpg" };
+
 	// コンストラクタ（必ず実装）
 	Clear(const InitData& init)
 		: IScene{ init }
@@ -325,18 +330,62 @@ public:
 	// 描画関数（オプション）
 	void draw() const override
 	{
-		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Deepskyblue, Arg::bottom = Palette::Midnightblue);
+		yudati.scaled(1.0).drawAt(400, 300);
 
-		fonta(U"GAME CLEAR").draw(100, 85, 100, Palette::Gold);
+		fonta(U"GAME CLEAR").draw(120, 20, 100, Palette::Gold);
 
 		m_clearButton.draw(ColorF{ 1.0, m_clearTransition.value() }).drawFrame(2);
 
 		FontAsset(U"Menu")(U"BACK TITLE").drawAt(m_clearButton.center(), ColorF{ 0.25 });
+
 	}
 
 private:
 	Rect m_clearButton{ Arg::center = Scene::Center().movedBy(0, 50), 300, 60 };
 	Transition m_clearTransition{ 0.4s, 0.2s };
+};
+
+// ゲームオーバーシーン
+class GameOver : public App::Scene
+{
+public:
+
+	const Font fonta{ FontMethod::MSDF,48 };
+
+	const Texture deepsea{ U"example/DSC_9317.jpg" };
+
+	// コンストラクタ（必ず実装）
+	GameOver(const InitData& init)
+		: IScene{ init }
+	{
+
+	}
+
+	// 更新関数（オプション）
+	void update() override
+	{
+		m_gameOverTransition.update(m_gameOverButton.mouseOver());
+		if (m_gameOverButton.leftClicked())
+		{
+			// タイトルシーンへ
+			changeScene(State::Title, 0.5s);
+		}
+	}
+
+	// 描画関数（オプション）
+	void draw() const override
+	{
+		deepsea.scaled(1.0).drawAt(400, 300);
+
+		fonta(U"GAME OVER").draw(100, 85, 100, Palette::Red);
+
+		m_gameOverButton.draw(ColorF{ 0.0, m_gameOverTransition.value() }).drawFrame(2);
+
+		FontAsset(U"Menu")(U"BACK TITLE").drawAt(m_gameOverButton.center(), ColorF{ 1.0 });
+	}
+private:
+	Rect m_gameOverButton{ Arg::center = Scene::Center().movedBy(0, 50), 300, 60 };
+	Transition m_gameOverTransition{ 0.4s, 0.2s };
 };
 
 void Main()
@@ -352,6 +401,7 @@ void Main()
 	manager.add<Title>(State::Title);
 	manager.add<Game>(State::Game);
 	manager.add<Clear>(State::Clear);
+	manager.add<GameOver>(State::GameOver);
 
 	while (System::Update())
 	{
