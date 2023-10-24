@@ -99,7 +99,7 @@ public:
 	int32 cooltime = 200;
 
 	const Font font{ FontMethod::MSDF,48 };
-	double timeLeft = 2.0;
+	double timeLeft = 120.0;
 
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
