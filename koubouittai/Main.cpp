@@ -72,6 +72,9 @@ private:
 class Game : public App::Scene
 {
 public:
+
+	const Texture monster{ U"example/monster.png" };
+
 	Vec2 GenerateEnemy()
 	{
 		return RandomVec2({ 50, 750 }, 0);
@@ -125,7 +128,7 @@ public:
 		{
 			enemies << Circle(GenerateEnemy(), 20);
 			enemiesEnable << true;
-			cooltime = 200;
+			cooltime = Random(150, 300);
 		}
 
 		//敵の移動
@@ -134,8 +137,8 @@ public:
 		{
 			if (enemiesEnable[i] == true)
 			{
-				enemies[i].x += (playerPos.x - enemies[i].x) * 0.01;
-				enemies[i].y += (playerPos.y - enemies[i].y) * 0.01;
+				enemies[i].x += (playerPos.x - enemies[i].x) * 0.005 * Random(1,2);
+				enemies[i].y += (playerPos.y - enemies[i].y) * 0.005;
 			}
 		}
 
@@ -281,11 +284,14 @@ public:
 
 		player.draw(Palette::White);
 		shot.draw(Palette::Yellow);
+
+
 		for (auto i : step(enemies.size()))
 		{
 			if (enemiesEnable[i] == true)
 			{
 				enemies[i].draw(Palette::Red);
+				monster.scaled(0.1).drawAt(enemies[i].x, enemies[i].y);
 			}
 		}
 
