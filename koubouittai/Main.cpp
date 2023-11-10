@@ -153,7 +153,7 @@ public:
 		}
 
 		//弾の移動入力
-
+		// 
 		// ←
 		if (KeyA.pressed())
 		{
@@ -222,6 +222,35 @@ public:
 			}
 		}
 
+		//弾の発射位置
+		if (shotEnable == false)
+		{
+			// ←
+			if (KeyA.pressed())
+			{
+				shotpos.x = playerPos.x - 41;
+				shotpos.y = 300;
+			}
+			// → 
+			if (KeyD.pressed())
+			{
+				shotpos.x = playerPos.x + 41;
+				shotpos.y = 300;
+			}
+			// ↑ 
+			if (KeyW.pressed())
+			{
+				shotpos.y = playerPos.y - 41;
+				shotpos.x = 400;
+			}
+			// ↓ 
+			if (KeyS.pressed())
+			{
+				shotpos.y = playerPos.y + 41;
+				shotpos.x = 400;
+			}
+		}
+		
 		if (shotEnable == true)
 		{
 			//弾の移動
@@ -265,6 +294,11 @@ public:
 				}
 
 			}
+		}
+		//弾vs自機
+		if (shot.intersects(player) && shotEnable == true)
+		{
+			playerEnable = false;
 		}
 
 		//クリア判定
