@@ -77,7 +77,7 @@ public:
 
 	Vec2 GenerateEnemy()
 	{
-		return RandomVec2({ 50, 750 }, 0);
+		return RandomVec2(Rect{-400, -400, 1200, 1000});
 	}
 	//画面の大きさ
 	const RectF shape{ 0, 0, 800, 600 };
@@ -126,8 +126,12 @@ public:
 		--cooltime;
 		if (cooltime <= 0)
 		{
-			enemies << Circle(GenerateEnemy(), 20);
-			enemiesEnable << true;
+			Vec2 pos = GenerateEnemy();
+			if (pos.x < 0 || pos.x > Scene::Width() || pos.y < 0 || pos.y > Scene::Height())
+			{
+				enemies << Circle(pos, 20);
+				enemiesEnable << true;
+			}
 			cooltime = Random(150, 300);
 		}
 
@@ -259,6 +263,7 @@ public:
 					playerEnable = false;
 					enemiesEnable[i] = false;
 				}
+
 			}
 		}
 
