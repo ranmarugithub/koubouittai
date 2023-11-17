@@ -74,6 +74,7 @@ class Game : public App::Scene
 public:
 
 	const Texture monster{ U"example/monster.png" };
+	const Texture submarine{ U"example/sensuikan.png" };
 
 	Vec2 GenerateEnemy()
 	{
@@ -102,7 +103,7 @@ public:
 	int32 cooltime = 200;
 
 	const Font font{ FontMethod::MSDF,48 };
-	double timeLeft = 120.0;
+	double timeLeft = 30.0;
 
 	// コンストラクタ（必ず実装）
 	Game(const InitData& init)
@@ -118,7 +119,7 @@ public:
 
 		const double deltaTime = Scene::DeltaTime();
 		//playerの位置
-		player = { playerPos,20 };
+		player = { playerPos,30 };
 		//弾の位置
 		shot = { shotpos,20 };
 
@@ -321,9 +322,12 @@ public:
 		Scene::SetBackground(Palette::Midnightblue);
 		Rect{ 0,0,800,600 }.draw(Arg::top = Palette::Midnightblue, Arg::bottom = Palette::Black);
 
-		player.draw(Palette::White);
-		shot.draw(Palette::Yellow);
-
+		//player.draw(Palette::White);
+		if (shotEnable == true)
+		{
+			shot.draw(Palette::Yellow);
+		}
+		submarine.scaled(0.2).drawAt(playerPos);
 
 		for (auto i : step(enemies.size()))
 		{
